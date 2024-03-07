@@ -27,7 +27,10 @@ private:
 	class USpringArmComponent* MySpringArm;
 
 	void Move(float Value);
+	void Turn(float Value);
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float Speed = 1;
+	float Speed = 100;
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float TurnRate = 100;
 };

@@ -6,7 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
+
 
 ATank::ATank()
 {
@@ -46,14 +46,7 @@ void ATank::Tick(float DeltaTime)
             HitResult
             );
         
-        DrawDebugSphere(
-        GetWorld(), 
-        HitResult.ImpactPoint,
-        25.f,
-        12,
-        FColor::Red,
-        false,
-        -1.f );
+        RotateTurret(HitResult.ImpactPoint);
     }
 }
 
@@ -71,5 +64,4 @@ void ATank::Turn(float Value)
     //Yaw = Value * TurnRate * DT
     DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
     AddActorLocalRotation(DeltaRotation, true);
-
 }

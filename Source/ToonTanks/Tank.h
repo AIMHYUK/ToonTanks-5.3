@@ -28,4 +28,6 @@ private:
 
 	void Move(float Value);
 
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float Speed = 1;
 };

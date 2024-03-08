@@ -16,9 +16,10 @@ public:
 	ABasePawn();
 
 
-protected:
+protected: //상속받은 애들이 쓰는거
 
 	void RotateTurret(FVector LookAtTarget);
+	void Fire();
 
 private:
 

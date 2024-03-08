@@ -25,6 +25,14 @@ public:
 private:
 
 	class ATank* Tank;
+
 	UPROPERTY(EditAnywhere)
 	float FireRange = 700;
+	
+	FTimerHandle FireRateTimerHandle;
+	float FireRate = 2.f;
+	void CheckFireCondition();
+
+	bool InFireRange();
+
 };

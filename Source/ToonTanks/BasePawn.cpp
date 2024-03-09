@@ -3,8 +3,9 @@
 
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
+#include "ProjectTile.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -40,15 +41,11 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 
 void ABasePawn::Fire()
 {
-	FVector SpawnPoint = ProjectileSpawnPoint->GetComponentLocation();
-	DrawDebugSphere(
-		GetWorld(), 
-		SpawnPoint,
-		25,
-		12,
-		FColor::Red,
-		false,
-		3
-	);
+	auto Projectile = GetWorld()->SpawnActor<AProjectTile>(
+		ProjectileClass, 
+		ProjectileSpawnPoint->GetComponentLocation(),
+		ProjectileSpawnPoint->GetComponentRotation()
+		);
+	Projectile->SetOwner(this);
 }
 

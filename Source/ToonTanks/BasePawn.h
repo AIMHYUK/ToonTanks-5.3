@@ -35,4 +35,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint;
 
+
+	UPROPERTY(EditDefaultsOnly, Category = "projecttile")
+	TSubclassOf<class AProjectTile> ProjectileClass;
+
 };

@@ -15,6 +15,7 @@ public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
 
+	void HandleDestruction(); //게임모드에서 호출
 
 protected: //상속받은 애들이 쓰는거
 

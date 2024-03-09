@@ -27,11 +27,18 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
     PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
 }
 
+void ATank::HandleDestruction()
+{
+    Super::HandleDestruction(); //시각/음향 효과 얻어옴
+    SetActorHiddenInGame(true);
+    SetActorTickEnabled(false);
+}
+
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	
-    PlayerControllRef = Cast<APlayerController>(GetController());
+    TankPlayerController = Cast<APlayerController>(GetController());
 
 }
 
@@ -40,9 +47,9 @@ void ATank::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
     FHitResult HitResult;
-    if(PlayerControllRef)
+    if(TankPlayerController)
     {
-        PlayerControllRef->GetHitResultUnderCursor(
+        TankPlayerController->GetHitResultUnderCursor(
             ECollisionChannel::ECC_Visibility,
             false,
             HitResult

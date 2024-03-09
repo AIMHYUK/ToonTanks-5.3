@@ -18,6 +18,11 @@ public:
 	ATank();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void HandleDestruction();
+
+	APlayerController* GetTankPlayerController() const { return TankPlayerController;}
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,5 +46,5 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float TurnRate = 100;
 
-	APlayerController* PlayerControllRef;
+	APlayerController* TankPlayerController;
 };

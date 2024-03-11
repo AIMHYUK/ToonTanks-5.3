@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "ProjectTile.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -24,11 +25,21 @@ ABasePawn::ABasePawn()
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Spawn Point"));
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
+
+
 }
 
 void ABasePawn::HandleDestruction()
 {
-	//죽을때 시각/음향추가
+	if(DeathParticles)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticles, GetActorLocation(), GetActorRotation());
+			UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
+			if(DeathcameraShakeClass)
+			{
+			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathcameraShakeClass);
+			}
+		}
 }
 
 void ABasePawn::RotateTurret(FVector LookAtTarget)
@@ -46,7 +57,7 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 
 void ABasePawn::Fire()
 {
-	auto Projectile = GetWorld()->SpawnActor<AProjectTile>(
+	AProjectTile* Projectile = GetWorld()->SpawnActor<AProjectTile>(
 		ProjectileClass, 
 		ProjectileSpawnPoint->GetComponentLocation(),
 		ProjectileSpawnPoint->GetComponentRotation()

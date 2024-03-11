@@ -27,8 +27,7 @@ void AToonTanksGameMode::ActorDied(AActor* DeadActor)
             GameOver(true);
         }
     }
-        
-    
+       
 }
 
 void AToonTanksGameMode::BeginPlay()

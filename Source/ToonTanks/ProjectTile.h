@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "ProjectTile.generated.h"
 
+class USoundBase;
+
 UCLASS()
 class TOONTANKS_API AProjectTile : public AActor
 {
@@ -31,6 +33,21 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 50;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	class UParticleSystem* HitParticles;
+
+	UPROPERTY(VisibleAnywhere, Category = "Combat")
+	class UParticleSystemComponent * FollowingHitParticles;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	USoundBase *LaunchSound;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	USoundBase *HitSound;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<class UCameraShakeBase> HitcameraShakeClass;
 
 public:	
 	// Called every frame

@@ -32,6 +32,7 @@ void ATank::HandleDestruction()
     Super::HandleDestruction(); //시각/음향 효과 얻어옴
     SetActorHiddenInGame(true);
     SetActorTickEnabled(false);
+    bAlive = false;
 }
 
 void ATank::BeginPlay()

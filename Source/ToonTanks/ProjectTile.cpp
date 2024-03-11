@@ -5,6 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/DamageType.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -20,7 +21,8 @@ AProjectTile::AProjectTile()
 	ProjectileMovementComponent->MaxSpeed = 1300;
 	ProjectileMovementComponent->InitialSpeed = 1300;
 
-
+	FollowingHitParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SmokeTrail"));
+	FollowingHitParticles->SetupAttachment(RootComponent);
 
 }
 
@@ -30,6 +32,12 @@ void AProjectTile::BeginPlay()
 	Super::BeginPlay();
 	
 	ProjectTileMesh->OnComponentHit.AddDynamic(this, &AProjectTile::OnHit);
+	if (LaunchSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation());
+	}
+
+
 }
 
 // Called every frame
@@ -41,15 +49,33 @@ void AProjectTile::Tick(float DeltaTime)
 
 void AProjectTile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit)
 {
-	auto MyOwner = GetOwner();
-	if(MyOwner == nullptr) return;
+	AActor* MyOwner = GetOwner();
+	if(MyOwner == nullptr)
+	{
+		Destroy();
+		return;
+	}
 
-	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
-	auto DamageTypeClass = UDamageType::StaticClass();
+	AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
+	UClass* DamageTypeClass = UDamageType::StaticClass();
 	
 	if(OtherActor && OtherActor != this && OtherActor != MyOwner)
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
+		if(HitParticles)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(this, HitParticles, GetActorLocation(), GetActorRotation());
+			
+		}
+		if(HitSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+		}
+		if(HitcameraShakeClass)
+		{
+			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitcameraShakeClass);
+		}
 		Destroy();
 	}
 }
+
